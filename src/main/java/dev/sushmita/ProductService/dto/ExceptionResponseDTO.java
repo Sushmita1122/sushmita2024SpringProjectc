@@ -10,6 +10,7 @@ public class ExceptionResponseDTO {
     int code;
 
     public ExceptionResponseDTO(String message, int code) {
+        System.out.println("just for testing purpose");
         this.message = message;
         this.code = code;
     }
