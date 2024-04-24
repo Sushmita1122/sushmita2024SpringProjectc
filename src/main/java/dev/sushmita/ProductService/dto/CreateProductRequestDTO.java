@@ -1,18 +1,17 @@
 package dev.sushmita.ProductService.dto;
 
-import dev.sushmita.ProductService.entity.Category;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
-public class ProductResponseDto {
-    private int productId;
+public class CreateProductRequestDTO {
     private String title;
     private double price;
     private String description;
-    private String category;
     private String imageURL;
     private double rating;
-
+    private UUID categoryId;
 }

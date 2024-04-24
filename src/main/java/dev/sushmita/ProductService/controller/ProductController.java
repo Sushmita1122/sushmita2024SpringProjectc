@@ -1,6 +1,8 @@
 package dev.sushmita.ProductService.controller;
 
+import dev.sushmita.ProductService.dto.CreateProductRequestDTO;
 import dev.sushmita.ProductService.dto.FakeStoreProductResponseDTO;
+import dev.sushmita.ProductService.dto.ProductResponseDto;
 import dev.sushmita.ProductService.entity.Product;
 import dev.sushmita.ProductService.exception.RandomException;
 import dev.sushmita.ProductService.service.ProductService;
@@ -10,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class ProductController {
@@ -19,16 +22,20 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/product")
-    public ResponseEntity getAllProducts() {
-        List<FakeStoreProductResponseDTO> product = productService.getAllproducts();
+    public ResponseEntity<List<ProductResponseDto>> getAllProducts() {
+        List<ProductResponseDto> product = productService.getAllproducts();
         return ResponseEntity.ok(product);
     }
 
     @GetMapping("/product/{id}")
-    public ResponseEntity getProductById(@PathVariable("id") int id) {
-        FakeStoreProductResponseDTO productByid = productService.getProduct(id);
-        return ResponseEntity.ok(productByid);
+    public ResponseEntity<ProductResponseDto> getProductById(@PathVariable("id") UUID id) {
+//        ProductResponseDto  productByid = productService.getProduct(id);
+        return ResponseEntity.ok(productService.getProduct(id));
 
+    }
+    @GetMapping("/name/{productName}")
+    public ResponseEntity getProductById(@PathVariable("productName") String productName) {
+        return ResponseEntity.ok(productService.findByproductName(productName));
     }
 
     @GetMapping("/productException")
@@ -38,8 +45,18 @@ public class ProductController {
     }
 
     @PostMapping("/createProduct")
-    public ResponseEntity createProduct(@RequestBody Product product) {
-        Product saveProduct = productService.createProduct(product);
-        return ResponseEntity.ok(saveProduct);
+    public ResponseEntity<ProductResponseDto> createProduct(@RequestBody CreateProductRequestDTO product) {
+        return ResponseEntity.ok(productService.createProduct(product));
+
     }
+    @DeleteMapping("/deleteProduct/{id}")
+    public ResponseEntity<Boolean> deleteProduct(@PathVariable ("id") UUID id) {
+      return ResponseEntity.ok(productService.deleteProduct(id));
+    }
+    @PutMapping("/updateProduct/{id}")
+    public ResponseEntity<ProductResponseDto> updateProduct(@RequestBody CreateProductRequestDTO productRequestDTO, @PathVariable ("id") UUID id){
+        return ResponseEntity.ok(productService.updateProduct(productRequestDTO , id));
+
+    }
+
 }
